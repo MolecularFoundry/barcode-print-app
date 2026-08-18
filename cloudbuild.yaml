@@ -1,0 +1,45 @@
+steps:
+  # Step 1: Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '${_IMAGE_PATH}', '.']
+
+  # Step 2: Push the image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '${_IMAGE_PATH}']
+
+  # Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:stable'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE_NAME}'
+      - '--image'
+      - '${_IMAGE_PATH}:latest'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--set-env-vars'
+      - 'URL_PREFIX=${_URL_PREFIX},OIDC_REDIRECT_URI=${_OIDC_REDIRECT_URI}'
+      - '--set-secrets'
+      - >-
+        CRUCIBLE_API_KEY=crucible_admin_apikey:latest,
+        MQTT_PASSWORD=mqtt-crucible-printers-passwd:latest,
+        PYOIDC_SECRET=pyoidc_secret_key:latest,
+        ORCID_CLIENT_ID=orcid_client_id:latest,
+        ORCID_CLIENT_SECRET=orcid_client_secret:latest
+      - '--service-account'
+      - 'sample-creators-cloudrun@mf-crucible.iam.gserviceaccount.com'
+      - '--allow-unauthenticated'
+
+substitutions:
+  _SERVICE_NAME: 'barcode-print-app'
+  _REGION: 'us-central1'
+  _IMAGE_PATH: '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${REPO_NAME}/${BRANCH_NAME}'
+  # Must match a redirect URI registered on the ORCID OAuth app.
+  _URL_PREFIX: '/barcode-printing'
+  _OIDC_REDIRECT_URI: 'https://crucible.lbl.gov/barcode-printing/redirect_uri'
+
+images:
+  - '${_IMAGE_PATH}'

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in — Print Sample Barcodes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="login-wrap">
+        <div class="login-card">
+            <h1>Print Sample Barcodes</h1>
+            <p>Access is managed through your ORCID researcher account.</p>
+
+            {% if error %}
+            <div class="alert alert-error" style="margin-bottom:16px;">{{ error }}</div>
+            {% endif %}
+
+            <a href="{{ url_for('login_go') }}" class="btn-orcid">Sign in with ORCID</a>
+
+            <div class="login-footer">
+                ORCID provides a persistent identifier for researchers. If you don't have
+                one, <a href="https://orcid.org/register" target="_blank" rel="noopener">create
+                an account for free</a> at orcid.org.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

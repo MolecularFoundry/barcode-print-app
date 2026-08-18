@@ -1,0 +1,14 @@
+[project]
+name = "barcode-print-app"
+version = "0.1.0"
+description = "ORCID-authenticated web app for printing Crucible sample barcode labels"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "flask>=3.1.2",
+    "flask-pyoidc>=3.14.3",
+    "gunicorn>=23.0.0",
+    "nano-crucible>=3.1.0",
+    "paho-mqtt>=2.1.0",
+    "python-dotenv>=1.2.1",
+]
