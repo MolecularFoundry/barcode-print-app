@@ -11,7 +11,7 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-CRUCIBLE_API_URL = os.environ.get("CRUCIBLE_API_URL", "https://crucible.lbl.gov/api/v2")
+CRUCIBLE_API_URL = os.environ.get("CRUCIBLE_API_URL", "https://crucible.lbl.gov/api/v3")
 
 # Only ever used to mint a user's personal API key. Every call made on behalf of a
 # signed-in user goes through get_user_client() instead.
